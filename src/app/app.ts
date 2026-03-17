@@ -10,5 +10,25 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './app.css'
 })
 export class App {
-  objetoscDzialki: number = 0;
+  P: number = 0;
+  a: number = 0;
+  b: number = 0;
+
+  wyniki: { nazwa: string;x: number; y: number; K: number; nazwaDrogi?: string; nazwaTani?: string; optymalny?: boolean }[] = [];
+
+  nazwaDrozszegoMaterialu: string = '';
+  nazwaTanszegoMaterialu: string = '';
+
+  oblicz() {
+    const xOptymlane = Math.sqrt(this.b * this.P / this.a);
+    const yOptymalne = Math.sqrt(this.a * this.P / this.b);
+
+    this.wyniki = [
+      {nazwa: 'x * 1.5', x: xOptymlane * 1.5, y: this.P / (xOptymlane * 1.5), K: 2*this.a*(xOptymlane * 1.5) + 2*this.b*(this.P / (xOptymlane * 1.5))},
+      {nazwa: 'x * 1.25', x: xOptymlane * 1.25, y: this.P / (xOptymlane * 1.25), K: 2*this.a*(xOptymlane * 1.25) + 2*this.b*(this.P / (xOptymlane * 1.25))},
+      {nazwa: 'x', x: xOptymlane, y: yOptymalne, K: 4*Math.sqrt(this.a * this.b * this.P), optymalny: true, nazwaDrogi: this.nazwaDrozszegoMaterialu, nazwaTani: this.nazwaTanszegoMaterialu},
+      {nazwa: 'x * 0.75', x: xOptymlane * 0.75, y: this.P / (xOptymlane * 0.75), K: 2*this.a*(xOptymlane * 0.75) + 2*this.b*(this.P / (xOptymlane * 0.75))},
+      {nazwa: 'x * 0.5', x: xOptymlane * 0.5, y: this.P / (xOptymlane * 0.5), K: 2*this.a*(xOptymlane * 0.5) + 2*this.b*(this.P / (xOptymlane * 0.5))}
+    ]
+  }
 }

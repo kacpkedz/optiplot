@@ -1,12 +1,76 @@
 <div class="container text-center">
-  <div class="col-4">
+  <div class="row">
+    <div class="col-4 mt-5">
     <div class="card">
+      <div class="card-header">
+        <h5>Parametry</h5>
+      </div>
       <div class="card-body">
-        <h5 class="card-title">Parametry</h5>
-        <p class="card-text">Podaj objętość działki:</p>
-        <input type="number" class="form-control" [(ngModel)]="objetoscDzialki" placeholder="metry kwadratowe">
+        <p class="card-text">Podaj powierzchnie działki [metry kwadratowe]:</p>
+        <input type="number" class="form-control" [(ngModel)]="P">
+        <div class="d-flex gap-2 algin-items-center">
+          <div>
+            <p class="card-text" style="margin-top: 10px;">Cena droższego boku:</p>
+            <input type="number" class="form-control" [(ngModel)]="a">
+          </div>
+          <div>
+            <p class="card-text" style="margin-top: 10px;">Nazwa materiału:</p>
+            <input type="text" class="form-control" [(ngModel)]="nazwaDrozszegoMaterialu">
+          </div>
+        </div>
+        <div class="d-flex gap-2 algin-items-center">
+          <div>
+            <p class="card-text" style="margin-top: 10px;">Cena tańszego boku:</p>
+            <input type="number" class="form-control" [(ngModel)]="b">
+          </div>
+          <div>
+            <p class="card-text" style="margin-top: 10px;">Nazwa materiału:</p>
+            <input type="text" class="form-control" [(ngModel)]="nazwaTanszegoMaterialu">
+          </div>
+        </div>
+        <input type="button"  class="btn btn-warning mt-3" value="Oblicz" (click)="oblicz()">
       </div>
     </div>
   </div>
-  <div class="col-8"></div>
+  <div class="col-8 mt-5 text-start">
+    <div class="card">
+      <div class="card-body">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">Lp.</th>
+              <th scope="col">Długość <i style="font-weight: lighter;">({{ wyniki[2].nazwaDrogi }})</i></th>
+              <th scope="col">Szerokość <i style="font-weight: lighter;">({{ wyniki[2].nazwaTani }})</i></th>
+              <th scope="col">Cena</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let wynik of wyniki" [class.table-warning]="wynik.optymalny">
+              <th scope="row"> {{wynik.nazwa}} </th>
+              <td>{{ wynik.x | number:'1.2-2' }} m</td>
+              <td>{{ wynik.y | number:'1.2-2' }} m</td>
+              <td>{{ wynik.K | number:'1.2-2' }} zł</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  </div>
+  <div class="row">
+    <div class="col-4">
+      <div class="card mt-3">
+        <div class="card-header">
+          <h5>Założenia</h5>
+        </div>
+        <div class="card-body text-start" style="font-size: 12px;">
+          <p class="card-text"><b>Problem optymalizacyjny:</b></p>
+          <p class="card-text"><i>Minimalizować koszt ogrodzenia działki o ustalonej objętości.</i></p>
+          <p class="card-text">Działka ma kształt prostokąta o bokach x i y. <b>Zakładamy że bok zależny od długości to ten droższy.</b> Wyliczam optymalne wymiary działki dla najmniejszej ceny ogrodzenia<i> (kolor żółty)</i>.
+            Pozostałe wyniki są obliczone dla różnych proporcji boków, ale tej samej objętości.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
