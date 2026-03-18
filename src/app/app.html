@@ -28,7 +28,21 @@
             <input type="text" class="form-control" [(ngModel)]="nazwaTanszegoMaterialu">
           </div>
         </div>
-        <input type="button"  class="btn btn-warning mt-3" value="Oblicz" (click)="oblicz()">
+        <div class="row">
+          <div class="col-6 text-start">
+            <input [disabled]="czyPoprawneDane()" type="button"  class="btn btn-warning mt-3" value="Oblicz" (click)="oblicz()">
+            <div class="form-check form-switch mt-2">
+              <input type="checkbox" class="form-check-input" style="margin-top: 6px;" [(ngModel)]="pokazKwadrat">
+              <label for="form-check-input" style="font-size: 12px;">Kwadratowa działka?</label>
+            </div>
+          </div>
+          <div [style.display]="czyPoprawneDane() ? 'block' : 'none'" class="col-6 text-end mt-2" style="color: red; font-size: 12px;">
+            <span *ngIf="a <= b">Tańszy bok nie może być droższy!<br></span>
+            <span *ngIf="P <= 0">Pole nie może być 0!<br></span>
+            <span *ngIf="a <= 0">Tańszy bok nie może być 0!<br></span>
+            <span *ngIf="b <= 0">Droższy bok nie może być 0!</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -45,7 +59,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let wynik of wyniki" [class.table-warning]="wynik.optymalny">
+            <tr *ngFor="let wynik of wyniki" [class.table-warning]="wynik.optymalny" [class.table-dark]="wynik.kwadrat">
               <th scope="row"> {{wynik.nazwa}} </th>
               <td>{{ wynik.x | number:'1.2-2' }} m</td>
               <td>{{ wynik.y | number:'1.2-2' }} m</td>
