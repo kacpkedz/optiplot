@@ -59,7 +59,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let wynik of wyniki" [class.table-warning]="wynik.optymalny" [class.table-dark]="wynik.kwadrat">
+            <tr *ngFor="let wynik of wyniki" [class.table-warning]="wynik.optymalny" [class.table-dark]="wynik.kwadrat" style="cursor: pointer;">
               <th scope="row"> {{wynik.nazwa}} </th>
               <td>{{ wynik.x | number:'1.2-2' }} m</td>
               <td>{{ wynik.y | number:'1.2-2' }} m</td>
@@ -81,9 +81,26 @@
           <p class="card-text"><b>Problem optymalizacyjny:</b></p>
           <p class="card-text"><i>Minimalizować koszt ogrodzenia działki o ustalonej objętości.</i></p>
           <p class="card-text">Działka ma kształt prostokąta o bokach x i y. <b>Zakładamy że bok zależny od długości to ten droższy.</b> Wyliczam optymalne wymiary działki dla najmniejszej ceny ogrodzenia<i> (oddzielnie dla kwadratu)</i>.
-            Pozostałe wyniki są obliczone dla różnych proporcji boków, ale tej samej objętości.
+          Pozostałe wyniki są obliczone dla różnych proporcji boków, ale tej samej objętości.
           </p>
+          <div class="text-center">
+            <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#matematyka-modal">Jak to działa?</button>
+          </div>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="matematyka-modal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Matematyczna logika programu</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <img src="/Model.jpg" alt="ModelMatematyczny">
+        <img src="/Obliczenia.jpg" alt="ObliczeniaMatematyczne">
       </div>
     </div>
   </div>

@@ -13,7 +13,8 @@ export class App {
   a: number = 0;
   b: number = 0;
 
-  wyniki: { nazwa: string;x: number; y: number; K: number; nazwaDrogi?: string; nazwaTani?: string; optymalny?: boolean; kwadrat?: boolean }[] = [];
+  wyniki: { nazwa: string; x: number; y: number; K: number; nazwaDrogi?: string; nazwaTani?: string; optymalny?: boolean; kwadrat?: boolean }[] = [];
+  wybrany: { nazwa: string; x:number; y: number; K: number } | null = null;
 
   nazwaDrozszegoMaterialu: string = '';
   nazwaTanszegoMaterialu: string = '';
@@ -31,11 +32,11 @@ export class App {
     const bokKwadratu = Math.sqrt(this.P);
 
     this.wyniki = [
-      {nazwa: 'x * 1.5', x: xOptymlane * 1.5, y: this.P / (xOptymlane * 1.5), K: 2*this.a*(xOptymlane * 1.5) + 2*this.b*(this.P / (xOptymlane * 1.5))},
-      {nazwa: 'x * 1.25', x: xOptymlane * 1.25, y: this.P / (xOptymlane * 1.25), K: 2*this.a*(xOptymlane * 1.25) + 2*this.b*(this.P / (xOptymlane * 1.25))},
-      {nazwa: 'Optymalny (prostokąt)', x: xOptymlane, y: yOptymalne, K: 4*Math.sqrt(this.a * this.b * this.P), optymalny: true, nazwaDrogi: this.nazwaDrozszegoMaterialu, nazwaTani: this.nazwaTanszegoMaterialu},
-      {nazwa: 'x * 0.75', x: xOptymlane * 0.75, y: this.P / (xOptymlane * 0.75), K: 2*this.a*(xOptymlane * 0.75) + 2*this.b*(this.P / (xOptymlane * 0.75))},
-      {nazwa: 'x * 0.5', x: xOptymlane * 0.5, y: this.P / (xOptymlane * 0.5), K: 2*this.a*(xOptymlane * 0.5) + 2*this.b*(this.P / (xOptymlane * 0.5))}
+      { nazwa: '1:3', x: Math.sqrt(this.P * 1/3), y: Math.sqrt(this.P * 3/1), K: 2*this.a*Math.sqrt(this.P * 1/3) + 2*this.b*Math.sqrt(this.P * 3/1) },
+      { nazwa: '1:2', x: Math.sqrt(this.P * 1/2), y: Math.sqrt(this.P * 2/1), K: 2*this.a*Math.sqrt(this.P * 1/2) + 2*this.b*Math.sqrt(this.P * 2/1) },
+      { nazwa: 'Optymalny (prostokąt)', x: xOptymlane, y: yOptymalne, K: 4*Math.sqrt(this.a * this.b * this.P), optymalny: true, nazwaDrogi: this.nazwaDrozszegoMaterialu, nazwaTani: this.nazwaTanszegoMaterialu },
+      { nazwa: '2:1', x: Math.sqrt(this.P * 2/1), y: Math.sqrt(this.P * 1/2), K: 2*this.a*Math.sqrt(this.P * 2/1) + 2*this.b*Math.sqrt(this.P * 1/2) },
+      { nazwa: '3:1', x: Math.sqrt(this.P * 3/1), y: Math.sqrt(this.P * 1/3), K: 2*this.a*Math.sqrt(this.P * 3/1) + 2*this.b*Math.sqrt(this.P * 1/3) },
     ]
 
     if (this.pokazKwadrat) {
