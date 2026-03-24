@@ -1,5 +1,8 @@
 <div class="container text-center">
   <div class="row">
+    <h2 style="padding: 20px; margin-bottom: -45px;">Optymalizacja minimalnej ceny ogrodzenia</h2>
+  </div>
+  <div class="row">
     <div class="col-4 mt-5">
     <div class="card">
       <div class="card-header">
@@ -53,8 +56,8 @@
           <thead>
             <tr>
               <th scope="col">Lp.</th>
-              <th scope="col" style="color: blue;">Długość <i style="font-weight: lighter;">({{ wyniki[2].nazwaDrogi }})</i></th>
-              <th scope="col" style="color: red;">Szerokość <i style="font-weight: lighter;">({{ wyniki[2].nazwaTani }})</i></th>
+              <th scope="col" style="color: blue;">Długość <i style="font-weight: lighter;">({{ wyniki[2]?.nazwaDrogi }})</i></th>
+              <th scope="col" style="color: red;">Szerokość <i style="font-weight: lighter;">({{ wyniki[2]?.nazwaTani }})</i></th>
               <th scope="col">Cena</th>
             </tr>
           </thead>
@@ -80,7 +83,7 @@
         <div class="card-body text-start" style="font-size: 12px;">
           <p class="card-text"><b>Problem optymalizacyjny:</b></p>
           <p class="card-text"><i>Minimalizować koszt ogrodzenia działki o ustalonej objętości.</i></p>
-          <p class="card-text">Działka ma kształt prostokąta o bokach x i y. <b>Zakładamy że bok zależny od długości to ten droższy.</b> Wyliczam optymalne wymiary działki dla najmniejszej ceny ogrodzenia<i> (oddzielnie dla kwadratu)</i>.
+          <p class="card-text">Działka ma kształt prostokąta <i>(lub kwadratu)</i> o bokach x i y. <b>Podstawowo, dwa boki zależne od długości to ten droższe., dwa boki zależne od szerokości to te tańsze</b> Wyliczam optymalne wymiary działki dla najmniejszej ceny ogrodzenia<i> (oddzielnie dla kwadratu)</i>.
           Pozostałe wyniki są obliczone dla różnych proporcji boków, ale tej samej objętości.
           </p>
           <div class="text-center">
@@ -98,6 +101,33 @@
       </div>
     </div>
   </div>
+  <div class="row" style="margin-bottom: 20px;">
+    <div class="col-12">
+      <div class="card mt-3">
+        <div class="card-header">
+          <h5>Wybór droższych boków</h5>
+        </div>
+        <div class="card-body text-center">
+          <div class="form-check form-check-inline">
+            <input type="checkbox" id="lewy" class="form-check-input" [(ngModel)]="lewy" (change)="zliczajBoki()">
+            <label for="lewy" class="form-check-label">Lewy bok droższy</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input type="checkbox" id="gora" class="form-check-input" [(ngModel)]="gora" (change)="zliczajBoki()">
+            <label for="gora" class="form-check-label">Górny bok droższy</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input type="checkbox" id="prawy" class="form-check-input" [(ngModel)]="prawy" (change)="zliczajBoki()">
+            <label for="prawy" class="form-check-label">Prawy bok droższy</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input type="checkbox" id="dol" class="form-check-input" [(ngModel)]="dol" (change)="zliczajBoki()">
+            <label for="dol" class="form-check-label">Dolny bok droższy</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 <div class="modal fade" id="matematyka-modal" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
@@ -107,8 +137,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
-        <img src="/Model.jpg" alt="ModelMatematyczny">
-        <img src="/Obliczenia.jpg" alt="ObliczeniaMatematyczne">
+        w budowie...
       </div>
     </div>
   </div>

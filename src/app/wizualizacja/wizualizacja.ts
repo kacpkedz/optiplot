@@ -20,7 +20,7 @@ export class Wizualizacja implements OnChanges {
     const skala = Math.min(450 / this.x, 285 / this.y) * 0.9;
     const w = this.x * skala;
     const h = this.y * skala;
-    const sx = 15 + (450 - w) / 2;
+    const sx = 25 + (450 - w) / 2;
     const sy = (285 - h) / 2;
 
     ctx.fillStyle = '#ffeecc';
