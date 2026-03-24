@@ -53,8 +53,8 @@
           <thead>
             <tr>
               <th scope="col">Lp.</th>
-              <th scope="col">Długość <i style="font-weight: lighter;">({{ wyniki[2].nazwaDrogi }})</i></th>
-              <th scope="col">Szerokość <i style="font-weight: lighter;">({{ wyniki[2].nazwaTani }})</i></th>
+              <th scope="col" style="color: blue;">Długość <i style="font-weight: lighter;">({{ wyniki[2].nazwaDrogi }})</i></th>
+              <th scope="col" style="color: red;">Szerokość <i style="font-weight: lighter;">({{ wyniki[2].nazwaTani }})</i></th>
               <th scope="col">Cena</th>
             </tr>
           </thead>
@@ -86,6 +86,14 @@
           <div class="text-center">
             <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#matematyka-modal">Jak to działa?</button>
           </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-8" style="margin-top: -95px;">
+      <div class="card mt-3">
+        <div class="card-header"><h5>Wizualizacja optymalnej działki</h5></div>
+        <div class="card-body text-center">
+          <app-wizualizacja [x]="xOptymalny" [y]="yOptymalny"></app-wizualizacja>
         </div>
       </div>
     </div>

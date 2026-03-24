@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Wizualizacja } from "./wizualizacja/wizualizacja";
 
 @Component({
   selector: 'app-root',
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, Wizualizacja],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
@@ -12,6 +13,8 @@ export class App {
   P: number = 0;
   a: number = 0;
   b: number = 0;
+  xOptymalny: number = 0;
+  yOptymalny: number = 0;
 
   wyniki: { nazwa: string; x: number; y: number; K: number; nazwaDrogi?: string; nazwaTani?: string; optymalny?: boolean; kwadrat?: boolean }[] = [];
   wybrany: { nazwa: string; x:number; y: number; K: number } | null = null;
@@ -28,8 +31,10 @@ export class App {
   oblicz() {
     const xOptymlane = Math.sqrt(this.b * this.P / this.a);
     const yOptymalne = Math.sqrt(this.a * this.P / this.b);
-
     const bokKwadratu = Math.sqrt(this.P);
+
+    this.xOptymalny = xOptymlane
+    this.yOptymalny = yOptymalne
 
     this.wyniki = [
       { nazwa: '1:3', x: Math.sqrt(this.P * 1/3), y: Math.sqrt(this.P * 3/1), K: 2*this.a*Math.sqrt(this.P * 1/3) + 2*this.b*Math.sqrt(this.P * 3/1) },
