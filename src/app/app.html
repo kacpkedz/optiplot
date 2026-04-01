@@ -1,144 +1,25 @@
-<div class="container text-center">
-  <div class="row">
-    <h2 style="padding: 20px; margin-bottom: -45px;">Optymalizacja minimalnej ceny ogrodzenia</h2>
-  </div>
-  <div class="row">
-    <div class="col-4 mt-5">
-    <div class="card">
-      <div class="card-header">
-        <h5>Parametry</h5>
-      </div>
-      <div class="card-body">
-        <p class="card-text">Podaj powierzchnie działki [metry kwadratowe]:</p>
-        <input type="number" class="form-control" [(ngModel)]="P">
-        <div class="d-flex gap-2 algin-items-center">
-          <div>
-            <p class="card-text" style="margin-top: 10px;">Cena droższego boku:</p>
-            <input type="number" class="form-control" [(ngModel)]="a">
-          </div>
-          <div>
-            <p class="card-text" style="margin-top: 10px;">Nazwa materiału:</p>
-            <input type="text" class="form-control" [(ngModel)]="nazwaDrozszegoMaterialu">
-          </div>
-        </div>
-        <div class="d-flex gap-2 algin-items-center">
-          <div>
-            <p class="card-text" style="margin-top: 10px;">Cena tańszego boku:</p>
-            <input type="number" class="form-control" [(ngModel)]="b">
-          </div>
-          <div>
-            <p class="card-text" style="margin-top: 10px;">Nazwa materiału:</p>
-            <input type="text" class="form-control" [(ngModel)]="nazwaTanszegoMaterialu">
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-6 text-start">
-            <input [disabled]="czyPoprawneDane()" type="button"  class="btn btn-warning mt-3" value="Oblicz" (click)="oblicz()">
-            <div class="form-check form-switch mt-2">
-              <input type="checkbox" class="form-check-input" style="margin-top: 6px;" [(ngModel)]="pokazKwadrat">
-              <label for="form-check-input" style="font-size: 12px;">Kwadratowa działka?</label>
-            </div>
-          </div>
-          <div [style.display]="czyPoprawneDane() ? 'block' : 'none'" class="col-6 text-end mt-2" style="color: red; font-size: 12px;">
-            <span *ngIf="a <= b">Tańszy bok nie może być droższy!<br></span>
-            <span *ngIf="P <= 0">Pole nie może być 0!<br></span>
-            <span *ngIf="a <= 0">Tańszy bok nie może być 0!<br></span>
-            <span *ngIf="b <= 0">Droższy bok nie może być 0!</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-8 mt-5 text-start">
-    <div class="card">
-      <div class="card-body">
-        <table class="table table-hover">
-          <thead>
-            <tr>
-              <th scope="col">Lp.</th>
-              <th scope="col" style="color: blue;">Długość <i style="font-weight: lighter;">({{ wyniki[2]?.nazwaDrogi }})</i></th>
-              <th scope="col" style="color: red;">Szerokość <i style="font-weight: lighter;">({{ wyniki[2]?.nazwaTani }})</i></th>
-              <th scope="col">Cena</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let wynik of wyniki" [class.table-warning]="wynik.optymalny" [class.table-dark]="wynik.kwadrat" style="cursor: pointer;">
-              <th scope="row"> {{wynik.nazwa}} </th>
-              <td>{{ wynik.x | number:'1.2-2' }} m</td>
-              <td>{{ wynik.y | number:'1.2-2' }} m</td>
-              <td>{{ wynik.K | number:'1.2-2' }} zł</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-  </div>
-  <div class="row">
-    <div class="col-4">
-      <div class="card mt-3">
-        <div class="card-header">
-          <h5>Założenia</h5>
-        </div>
-        <div class="card-body text-start" style="font-size: 12px;">
-          <p class="card-text"><b>Problem optymalizacyjny:</b></p>
-          <p class="card-text"><i>Minimalizować koszt ogrodzenia działki o ustalonej objętości.</i></p>
-          <p class="card-text">Działka ma kształt prostokąta <i>(lub kwadratu)</i> o bokach x i y. <b>Podstawowo, dwa boki zależne od długości to ten droższe., dwa boki zależne od szerokości to te tańsze</b> Wyliczam optymalne wymiary działki dla najmniejszej ceny ogrodzenia<i> (oddzielnie dla kwadratu)</i>.
-          Pozostałe wyniki są obliczone dla różnych proporcji boków, ale tej samej objętości.
-          </p>
-          <div class="text-center">
-            <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#matematyka-modal">Jak to działa?</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-8" style="margin-top: -95px;">
-      <div class="card mt-3">
-        <div class="card-header"><h5>Wizualizacja optymalnej działki</h5></div>
-        <div class="card-body text-center">
-          <app-wizualizacja [x]="xOptymalny" [y]="yOptymalny"></app-wizualizacja>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="row" style="margin-bottom: 20px;">
-    <div class="col-12">
-      <div class="card mt-3">
-        <div class="card-header">
-          <h5>Wybór droższych boków</h5>
-        </div>
-        <div class="card-body text-center">
-          <div class="form-check form-check-inline">
-            <input type="checkbox" id="lewy" class="form-check-input" [(ngModel)]="lewy" (change)="zliczajBoki()">
-            <label for="lewy" class="form-check-label">Lewy bok droższy</label>
-          </div>
-          <div class="form-check form-check-inline">
-            <input type="checkbox" id="gora" class="form-check-input" [(ngModel)]="gora" (change)="zliczajBoki()">
-            <label for="gora" class="form-check-label">Górny bok droższy</label>
-          </div>
-          <div class="form-check form-check-inline">
-            <input type="checkbox" id="prawy" class="form-check-input" [(ngModel)]="prawy" (change)="zliczajBoki()">
-            <label for="prawy" class="form-check-label">Prawy bok droższy</label>
-          </div>
-          <div class="form-check form-check-inline">
-            <input type="checkbox" id="dol" class="form-check-input" [(ngModel)]="dol" (change)="zliczajBoki()">
-            <label for="dol" class="form-check-label">Dolny bok droższy</label>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="modal fade" id="matematyka-modal" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Matematyczna logika programu</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body">
-        <img src="/Matematyka.png" alt="Matematyka programu">
-      </div>
-    </div>
+<div class="container">
+  <h2 class="text-center">Optymalizacja ogrodzenia</h2>
+
+  <ul class="nav nav-tabs">
+    <li class="nav-item">
+      <a class="nav-link"
+         [class.active]="zakladka === 'prostokat'"
+         (click)="zakladka = 'prostokat'">
+        Prostokąt
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link"
+         [class.active]="zakladka === 'wielokat'"
+         (click)="zakladka = 'wielokat'">
+        Wielokąt
+      </a>
+    </li>
+  </ul>
+
+  <div class="mt-3">
+    <app-prostokat *ngIf="zakladka === 'prostokat'"></app-prostokat>
+    <app-wielokat *ngIf="zakladka === 'wielokat'"></app-wielokat>
   </div>
 </div>
