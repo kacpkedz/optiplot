@@ -1,164 +1,87 @@
-<div class="wielokat-wrapper">
-
-  <div class="wielokat-layout">
-
-    <!-- LEWA KOLUMNA -->
-    <div class="wielokat-sidebar">
-
-      <div class="card">
-        <div class="card-header"><h5>Parametry</h5></div>
+<div class="container text-center">
+  <div class="row">
+    <h2 style="padding: 20px; margin-bottom: -45px;">Kosztorys ogrodzenia dowolnego wielokąta</h2>
+  </div>
+  <div class="row">
+    <div class="col-4 mt-5 text-start">
+      <div class="card mb-3">
+        <div class="card-header">
+          <h5>Parametry</h5>
+        </div>
         <div class="card-body">
-          <label class="form-label">Cena tańszego boku [zł/m]:</label>
-          <input type="number" class="form-control" [(ngModel)]="cenaTania" (ngModelChange)="przelicz()">
-          <label class="form-label mt-2">Cena droższego boku [zł/m]:</label>
-          <input type="number" class="form-control" [(ngModel)]="cenaDroga" (ngModelChange)="przelicz()">
-          <label class="form-label mt-2">Skala [m / 100px]:</label>
-          <input type="number" class="form-control" [(ngModel)]="skala" (ngModelChange)="przelicz()">
+          <p class="card-text mt-3">Cena tańszego boku:</p>
+          <input type="number" class="form-control" [(ngModel)]="cenaTania" (ngModelChange)="rysuj()">
+          <p class="card-text mt-3">Cena droższego boku:</p>
+          <input type="number" class="form-control" [(ngModel)]="cenaDroga" (ngModelChange)="rysuj()">
+
+          <div class="row mt-4">
+            <div class="col-12">
+              <button class="btn btn-warning w-100 mb-2" [disabled]="punkty.length < 3 || zamkniety" (click)="zamknij()">Zamknij wielokąt</button>
+              <button class="btn btn-outline-danger w-100 mb-2" [disabled]="punkty.length === 0" (click)="cofnij()">Cofnij punkt</button>
+              <button class="btn btn-danger w-100" (click)="wyczysc()">Wyczyść wszystko</button>
+            </div>
+          </div>
         </div>
       </div>
 
       <div class="card">
-        <div class="card-header"><h5>Tryb</h5></div>
-        <div class="card-body d-flex flex-column gap-2">
-          <button class="btn"
-            [class.btn-primary]="tryb === 'rysuj'"
-            [class.btn-outline-primary]="tryb !== 'rysuj'"
-            (click)="setTryb('rysuj')">Rysuj wierzchołki</button>
-
-          <button class="btn"
-            [class.btn-warning]="tryb === 'zaznacz'"
-            [class.btn-outline-warning]="tryb !== 'zaznacz'"
-            [disabled]="!zamkniety"
-            (click)="setTryb('zaznacz')">Zaznacz droższe boki</button>
-
-          <button class="btn"
-            [class.btn-secondary]="tryb === 'edytuj'"
-            [class.btn-outline-secondary]="tryb !== 'edytuj'"
-            [disabled]="!zamkniety"
-            (click)="setTryb('edytuj')">Edytuj długość boku</button>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-header"><h5>Akcje</h5></div>
-        <div class="card-body d-flex flex-column gap-2">
-          <button class="btn btn-success"
-            [disabled]="punkty.length < 3 || zamkniety"
-            (click)="zamknij()">Zamknij wielokąt</button>
-
-          <button class="btn btn-outline-danger"
-            [disabled]="punkty.length === 0"
-            (click)="cofnij()">Cofnij ostatni punkt</button>
-
-          <button class="btn btn-danger" (click)="wyczysc()">Wyczyść</button>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-header"><h5>Jak używać</h5></div>
-        <div class="card-body wielokat-instrukcja">
-          <p>Klikaj kolejne wierzchołki na canvasie, aby rysować obrys działki. Zamknij wielokąt klikając pierwszy punkt lub przyciskiem.</p>
-          <p>Po zamknięciu zaznacz droższe boki i opcjonalnie wpisz ich rzeczywistą długość ręcznie.</p>
-          <p>Pole obliczane jest wzorem Gaussa. Koszt = suma (długość × cena) dla każdego boku.</p>
+        <div class="card-header"><h5>Długości boków</h5></div>
+        <div class="card-body p-2" style="max-height: 250px; overflow-y: auto;">
+          <p *ngIf="boki.length === 0" class="text-muted small m-2">Narysuj punkty, aby dodać boki.</p>
+          
+          <div *ngFor="let bok of boki; let i = index" class="border p-2 mb-2 rounded bg-light">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <strong>Bok {{ i + 1 }} → {{ (i + 1) % punkty.length + 1 }}</strong>
+              <div class="form-check form-switch mb-0">
+                <input class="form-check-input" type="checkbox" [(ngModel)]="bok.drogi" (change)="rysuj()">
+                <label class="form-check-label small" style="margin-top: 2px;">Droższy</label>
+              </div>
+            </div>
+            <div class="input-group input-group-sm">
+              <span class="input-group-text">Długość (m)</span>
+              <input type="number" class="form-control" [(ngModel)]="bok.dlugosc" (ngModelChange)="rysuj()" min="0">
+            </div>
+          </div>
         </div>
       </div>
 
     </div>
 
-    <!-- PRAWA KOLUMNA -->
-    <div class="wielokat-main">
-
-      <div class="card">
-        <div class="card-header"><h5>Rysunek działki</h5></div>
-        <div class="card-body p-2">
+    <div class="col-8 mt-5 text-start">
+      <div class="card mb-3">
+        <div class="card-header"><h5>Schemat działki</h5></div>
+        <div class="card-body text-center bg-white p-2">
           <canvas #canvas width="800" height="460"
-            class="wielokat-canvas"
-            (click)="onCanvasClick($event)"
-            (mousemove)="onCanvasMouseMove($event)">
+            style="border: 1px dashed #ccc; cursor: crosshair; max-width: 100%; height: auto;"
+            (click)="onCanvasClick($event)">
           </canvas>
-          <p class="wielokat-podpowiedz">{{ podpowiedz }}</p>
+          <p class="text-muted small mt-2 mb-0">Kliknij na planszę, aby narysować wierzchołki działki.</p>
         </div>
       </div>
 
-      <!-- Panel edycji długości boku (pokazuje się nad tabelą, gdy wybrany bok) -->
-      <div class="card wielokat-edycja" *ngIf="edytowanyBok !== null">
-        <div class="card-header">
-          <h5>Edytuj długość boku {{ edytowanyBok + 1 }} → {{ (edytowanyBok + 1) % punkty.length + 1 }}</h5>
-        </div>
-        <div class="card-body">
-          <div class="d-flex gap-2 align-items-center">
-            <input type="number" class="form-control" [(ngModel)]="nowaDlugosc"
-              min="0.1" step="0.1" placeholder="Długość w metrach">
-            <button class="btn btn-success" (click)="zapiszDlugosc()">Zapisz</button>
-            <button class="btn btn-outline-secondary" (click)="edytowanyBok = null">Anuluj</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Podsumowanie statystyk -->
-      <div class="card" *ngIf="punkty.length >= 2">
-        <div class="card-header"><h5>Podsumowanie</h5></div>
-        <div class="card-body">
-          <div class="wielokat-stats">
-            <div class="wielokat-stat">
-              <div class="wielokat-stat-label">Wierzchołki</div>
-              <div class="wielokat-stat-value">{{ punkty.length }}</div>
-            </div>
-            <div class="wielokat-stat">
-              <div class="wielokat-stat-label">Obwód</div>
-              <div class="wielokat-stat-value">{{ obwod() | number:'1.2-2' }} m</div>
-            </div>
-            <div class="wielokat-stat">
-              <div class="wielokat-stat-label">Pole działki</div>
-              <div class="wielokat-stat-value">{{ zamkniety ? (pole() | number:'1.2-2') + ' m²' : '—' }}</div>
-            </div>
-            <div class="wielokat-stat wielokat-stat--koszt">
-              <div class="wielokat-stat-label">Łączny koszt</div>
-              <div class="wielokat-stat-value">{{ zamkniety ? (koszt() | number:'1.2-2') + ' zł' : '—' }}</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Tabela boków -->
-      <div class="card" *ngIf="zamkniety">
-        <div class="card-header"><h5>Szczegóły boków</h5></div>
+      <div class="card" *ngIf="wyniki.length > 0">
         <div class="card-body p-0">
-          <table class="table table-hover mb-0">
+          <table class="table table-hover mb-0 text-center">
             <thead>
               <tr>
-                <th>Bok</th>
-                <th>Długość</th>
-                <th>Typ</th>
-                <th>Cena/m</th>
-                <th>Koszt</th>
+                <th scope="col">Układ siatki</th>
+                <th scope="col" style="color: blue;">Szacunkowe Pole Działki</th>
+                <th scope="col" style="color: red;">Koszt całkowity ogrodzenia</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let bok of boki(); let i = index">
-                <td>{{ i + 1 }} → {{ (i + 1) % punkty.length + 1 }}</td>
-                <td>
-                  {{ bok.dlugosc | number:'1.2-2' }} m
-                  <small *ngIf="bok.reczna" class="text-muted">(ręcznie)</small>
-                </td>
-                <td>
-                  <span *ngIf="bok.drogi" class="badge bg-warning text-dark">droższy</span>
-                  <span *ngIf="!bok.drogi" class="badge bg-success">tańszy</span>
-                </td>
-                <td>{{ bok.drogi ? cenaDroga : cenaTania }} zł/m</td>
-                <td><strong>{{ bok.koszt | number:'1.2-2' }} zł</strong></td>
+              <tr *ngFor="let wynik of wyniki" [class.table-warning]="wynik.nazwa.includes('Optymalna')" [class.table-light]="wynik.nazwa.includes('Tradycyjna')">
+                <th scope="row">
+                  {{ wynik.nazwa }}
+                  <br><small class="text-muted" style="font-weight: normal;">{{ wynik.info }}</small>
+                </th>
+                <td>{{ wynik.pole | number:'1.2-2' }} m²</td>
+                <td>{{ wynik.koszt | number:'1.2-2' }} zł</td>
               </tr>
             </tbody>
-            <tfoot>
-              <tr class="table-warning">
-                <td colspan="4"><strong>Łącznie</strong></td>
-                <td><strong>{{ koszt() | number:'1.2-2' }} zł</strong></td>
-              </tr>
-            </tfoot>
           </table>
         </div>
       </div>
-
     </div>
   </div>
 </div>
