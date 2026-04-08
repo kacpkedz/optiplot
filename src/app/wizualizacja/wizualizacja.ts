@@ -11,9 +11,7 @@ export class Wizualizacja implements OnChanges {
   @Input() x = 0;       // Długość działki (oś x) w metrach
   @Input() y = 0;       // Szerokość działki (oś y) w metrach
 
-  /**
-   * Przerysowuje canvas za każdym razem, gdy zmienią się wymiary (@Input).
-   */
+  // Metoda wywoływana przy zmianie danych wejściowych
   ngOnChanges(): void {
     if (!this.x || !this.y) return;
 
@@ -40,7 +38,7 @@ export class Wizualizacja implements OnChanges {
     ctx.textAlign = 'center';
     ctx.fillStyle = '#1100ff';
     ctx.fillText(this.x.toFixed(2) + ' m', sx + w / 2, sy + h + 20);
-    
+
     // Etykieta: szerokość
     ctx.fillStyle = '#ff0000';
     ctx.save();

@@ -11,67 +11,72 @@ import { Wizualizacja } from '../wizualizacja/wizualizacja';
 })
 export class Prostokat {
 
-  P: number = 0;
-  a: number = 0;
-  b: number = 0;
-  xOptymalny: number = 0;
-  yOptymalny: number = 0;
+  P: number = 0;          // Pole
+  a: number = 0;          // Cena droższego materiału
+  b: number = 0;          // Cena tańszego materiału
+  xOptymalny: number = 0; // Długość boku X optymalnego
+  yOptymalny: number = 0; // Długość boku Y optymalnego
 
   wyniki: any[] = [];
 
-  nazwaDrozszegoMaterialu: string = '';
-  nazwaTanszegoMaterialu: string = '';
+  nazwaDrozszegoMaterialu: string = ''; // Nazwa droższego materiału
+  nazwaTanszegoMaterialu: string = '';  // Nazwa tańszego materiału
 
-  pokazKwadrat: boolean = false;
+  pokazKwadrat: boolean = false; // Czy pokazać kwadrat?
 
-  lewy: boolean = false;
-  gora: boolean = true;
-  prawy: boolean = false;
-  dol: boolean = true;
+  lewy: boolean = false; // Lewy bok
+  gora: boolean = true;  // Górny bok
+  prawy: boolean = false; // Prawy bok
+  dol: boolean = true;   // Dolny bok
 
-  iloscDrozszychX = 0;
-  iloscDrozszychY = 0;
-  iloscTanszychX = 0;
-  iloscTanszychY = 0;
+  iloscDrozszychX = 0; // Ilość droższych boków X
+  iloscDrozszychY = 0; // Ilość droższych boków Y
+  iloscTanszychX = 0; // Ilość tańszych boków X
+  iloscTanszychY = 0; // Ilość tańszych boków Y
 
+  // Metoda wywoływana przy tworzeniu komponentu
   constructor() {
     this.zliczajBoki();
   }
 
+  // Metoda zliczająca boki
   zliczajBoki() {
     this.iloscDrozszychX = 0;
     this.iloscDrozszychY = 0;
 
-    if (this.gora) this.iloscDrozszychX++;
-    if (this.dol) this.iloscDrozszychX++;
-    if (this.lewy) this.iloscDrozszychY++;
-    if (this.prawy) this.iloscDrozszychY++;
+    if (this.gora) this.iloscDrozszychX++; // Jeśli góra jest droga, to zwiększamy licznik droższych boków X
+    if (this.dol) this.iloscDrozszychX++; // Jeśli dół jest drogi, to zwiększamy licznik droższych boków X
+    if (this.lewy) this.iloscDrozszychY++; // Jeśli lewy jest drogi, to zwiększamy licznik droższych boków Y
+    if (this.prawy) this.iloscDrozszychY++; // Jeśli prawy jest drogi, to zwiększamy licznik droższych boków Y
 
-    this.iloscTanszychX = 2 - this.iloscDrozszychX;
-    this.iloscTanszychY = 2 - this.iloscDrozszychY;
+    this.iloscTanszychX = 2 - this.iloscDrozszychX; // Obliczamy ilość tańszych boków X
+    this.iloscTanszychY = 2 - this.iloscDrozszychY; // Obliczamy ilość tańszych boków Y
   }
 
+  // Metoda sprawdzająca poprawność danych
   czyPoprawneDane(): boolean {
     return this.P <= 0 || this.a <= 0 || this.b <= 0 || this.a <= this.b;
   }
 
+  // Metoda obliczająca optymalne wymiary prostokąta
   oblicz() {
-    const A = this.iloscDrozszychX * this.a + this.iloscTanszychX * this.b;
-    const B = this.iloscDrozszychY * this.a + this.iloscTanszychY * this.b;
+    const A = this.iloscDrozszychX * this.a + this.iloscTanszychX * this.b; // Koszt materiału na bokach X
+    const B = this.iloscDrozszychY * this.a + this.iloscTanszychY * this.b; // Koszt materiału na bokach Y
 
-    const x = Math.sqrt(B * this.P / A);
-    const y = Math.sqrt(A * this.P / B);
+    const x = Math.sqrt(B * this.P / A); // Długość boku X optymalnego
+    const y = Math.sqrt(A * this.P / B); // Długość boku Y optymalnego
 
     this.xOptymalny = x;
     this.yOptymalny = y;
 
     this.wyniki = [
-      { nazwa: 'Optymalny', x, y, K: A * x + B * y, optymalny: true }
+      { nazwa: 'Optymalny', x, y, K: A * x + B * y, optymalny: true } // Obliczony koszt materiału
     ];
 
+    // Jeśli użytkownik chce zobaczyć kwadrat, to obliczamy koszt materiału dla kwadratu
     if (this.pokazKwadrat) {
-      const s = Math.sqrt(this.P);
-      this.wyniki.push({ nazwa: 'Kwadrat', x: s, y: s, K: A*s + B*s });
+      const s = Math.sqrt(this.P); // Długość boku kwadratu
+      this.wyniki.push({ nazwa: 'Kwadrat', x: s, y: s, K: A * s + B * s }); // Obliczony koszt materiału dla kwadratu
     }
   }
 }
