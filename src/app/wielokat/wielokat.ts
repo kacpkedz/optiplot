@@ -243,8 +243,12 @@ export class Wielokat implements OnInit {
 
       ctx.beginPath();
       for (let i = 0; i < n; i++) {
-        const px = cx + (this.punkty[i].x - cx) * this.optCx * renderScale;
-        const py = cy + (this.punkty[i].y - cy) * this.optCy * renderScale;
+        // Optymalne wymiary działki, bez względu na oryginalną działkę
+        const px = cx + (this.punkty[i].x - cx) * this.optCx;
+        const py = cy + (this.punkty[i].y - cy) * this.optCy;
+        // Optymalne wymiary, ale rozmiar przeskalowany tak aby zmieścił się w granicach oryginalnych wymiarów
+        //const px = cx + (this.punkty[i].x - cx) * this.optCx * renderScale;
+        //const py = cy + (this.punkty[i].y - cy) * this.optCy * renderScale;
         if (i === 0) ctx.moveTo(px, py);
         else ctx.lineTo(px, py);
       }

@@ -3,13 +3,13 @@
     <h2 style="padding: 20px; margin-bottom: -45px;">Kosztorys ogrodzenia dowolnego wielokąta</h2>
   </div>
   <div class="row">
-    <div class="col-4 mt-5 text-start">
+    <div class="col-4 mt-5 text-center">
       <div class="card mb-3">
         <div class="card-header">
           <h5>Parametry</h5>
         </div>
         <div class="card-body">
-          <p class="card-text mt-3">Cena tańszego boku:</p>
+          <p class="card-text">Cena tańszego boku:</p>
           <input type="number" class="form-control" [(ngModel)]="cenaTania" (ngModelChange)="rysuj()">
           <p class="card-text mt-3">Cena droższego boku:</p>
           <input type="number" class="form-control" [(ngModel)]="cenaDroga" (ngModelChange)="rysuj()">
@@ -25,7 +25,7 @@
       </div>
 
       <div class="card">
-        <div class="card-header"><h5>Długości boków</h5></div>
+        <div class="card-header text-center"><h5>Długości boków</h5></div>
         <div class="card-body p-2" style="max-height: 250px; overflow-y: auto;">
           <p *ngIf="boki.length === 0" class="text-muted small m-2">Narysuj punkty, aby dodać boki.</p>
           
@@ -49,13 +49,12 @@
 
     <div class="col-8 mt-5 text-start">
       <div class="card mb-3">
-        <div class="card-header"><h5>Schemat działki</h5></div>
+        <div class="card-header"><h5 class="text-center">Schemat działki</h5></div>
         <div class="card-body text-center bg-white p-2">
           <canvas #canvas width="800" height="460"
             style="border: 1px dashed #ccc; cursor: crosshair; max-width: 100%; height: auto;"
             (click)="onCanvasClick($event)">
           </canvas>
-          <p class="text-muted small mt-2 mb-0">Kliknij na planszę, aby narysować wierzchołki działki.</p>
         </div>
       </div>
 
